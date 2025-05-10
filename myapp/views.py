@@ -36,6 +36,7 @@ def generate_submission_code(matric_number):
     return code
 
 @api_view(['POST'])
+@permission_classes([AllowAny])  # Add this line to allow unauthenticated access
 def submit_form(request):
     """
     API endpoint for form submission.
