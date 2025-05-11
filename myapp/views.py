@@ -16,24 +16,14 @@ from rest_framework.permissions import IsAuthenticated, AllowAny
 from .models import StudentSubmission
 from .serializers import StudentSubmissionSerializer
 
+import uuid
+
 def generate_submission_code(matric_number):
     """
-    Generate a unique submission code with prefix EMT followed by 
-    the last 3 digits of the matric number.
+    Generate a random unique submission code with format EMT + 6 random chars
+    Example: EMT1A3B5C
     """
-    # Extract the last 3 digits from the matric number
-    digits = ''.join(filter(str.isdigit, matric_number))
-    last_three_digits = digits[-3:] if len(digits) >= 3 else digits.zfill(3)
-    
-    code = f"EMT{last_three_digits}"
-    
-    # Check if this code already exists
-    count = StudentSubmission.objects.filter(submission_code=code).count()
-    if count > 0:
-        # Append a suffix to make it unique
-        return f"{code}{count}"
-    
-    return code
+    return f"EMT{uuid.uuid4().hex[:6].upper()}"
 
 @api_view(['POST'])
 @permission_classes([AllowAny])  # Add this line to allow unauthenticated access
@@ -187,7 +177,9 @@ def export_data(request):
             'Permanent Address', 'Accommodation Type', 'Residential Address',
             'State of Residence', 'LGA of Residence', 'Guardian Name',
             'Guardian Phone Number', 'Religion', 'State of Origin', 'Local Government',
-            'Skills', 'Extracurricular Activities', 'Passport Image'
+            'Skills', 'Extracurricular Activities', 'Passport Image''Second Phone Number', 
+            'Marital Status', 'Mode of Entry', 'JAMB Reg Number',
+            'Next of Kin Name', 'Next of Kin Phone', 'Next of Kin Relationship'
         ]
         
         for col_num, header in enumerate(headers):
@@ -223,6 +215,13 @@ def export_data(request):
                 submission.local_government,
                 submission.skills,
                 submission.extracurricular_activities,
+                submission.second_phone_number,
+                submission.marital_status,
+                submission.mode_of_entry,
+                submission.jamb_reg_number,
+                submission.next_of_kin_name,
+                submission.next_of_kin_phone,
+                submission.next_of_kin_relationship,
                 request.build_absolute_uri(submission.passport.url) if submission.passport else ''
             ]
             

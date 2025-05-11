@@ -45,9 +45,23 @@ class StudentSubmission(models.Model):
     local_government = models.CharField(max_length=100)
     skills = models.TextField(blank=True)
     extracurricular_activities = models.TextField()
+
+    # New fields:
+    second_phone_number = models.CharField(max_length=20, blank=True)
+    marital_status = models.CharField(max_length=10, choices=[('Single', 'Single'), ('Married', 'Married')], blank=True, null=True)
+    mode_of_entry = models.CharField(max_length=20, choices=[('UTME', 'UTME'), ('Direct Entry', 'Direct Entry'), ('Transfer', 'Transfer')],  blank=True, null=True )
+    jamb_reg_number = models.CharField(max_length=50, blank=True)
+    next_of_kin_name = models.CharField(max_length=200, blank=True, null=True )
+    next_of_kin_phone = models.CharField(max_length=20,  blank=True, null=True)
+    next_of_kin_relationship = models.CharField(max_length=100, blank=True, null=True)
     
     # Submission information
-    submission_code = models.CharField(max_length=10, unique=True)
+    submission_code = models.CharField(
+        max_length=10,
+        unique=True,
+        editable=False,
+        default=lambda: f"EMT{uuid.uuid4().hex[:6].upper()}"
+    )
     submission_date = models.DateTimeField(auto_now_add=True)
     
     def __str__(self):

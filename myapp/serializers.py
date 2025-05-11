@@ -41,3 +41,15 @@ class StudentSubmissionSerializer(serializers.ModelSerializer):
             if file_extension not in ['jpg', 'jpeg', 'png']:
                 raise serializers.ValidationError("Only JPG and PNG files are allowed.")
         return value
+    
+    # New validators:
+    def validate_second_phone_number(self, value):
+        if value and not value.isdigit():
+            raise serializers.ValidationError("Second phone number must contain only digits.")
+        return value
+    
+    def validate_next_of_kin_phone(self, value):
+        if not value.isdigit():
+            raise serializers.ValidationError("Next of kin phone number must contain only digits.")
+        return value
+    
