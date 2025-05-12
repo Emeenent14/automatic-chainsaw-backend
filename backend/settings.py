@@ -1,5 +1,7 @@
 import os
 from pathlib import Path
+import dj_database_url
+from decouple import config
 from dotenv import load_dotenv
 load_dotenv() 
 
@@ -12,7 +14,10 @@ SECRET_KEY = 'django-insecure-xyw^(&lt_v&%25*-w-6jtbfv@k)k_hfdjdf'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['automatic-chainsaw-api.onrender.com']
+ALLOWED_HOSTS = ['automatic-chainsaw-backend.onrender.com', 
+                  '127.0.0.1',  # Allow localhost (IPv4)
+                  'localhost',   # Allow localhost (hostname)
+                  ]
 
 # Application definition
 INSTALLED_APPS = [
@@ -28,6 +33,7 @@ INSTALLED_APPS = [
 ]
 
 MIDDLEWARE = [
+    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'corsheaders.middleware.CorsMiddleware',
@@ -60,14 +66,7 @@ WSGI_APPLICATION = 'backend.wsgi.application'
 
 # Database
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': os.environ.get('DB_NAME'),
-        'USER': os.environ.get('DB_USER'),
-        'PASSWORD': os.environ.get('DB_PASSWORD'),
-        'HOST': os.environ.get('DB_HOST', 'localhost'),
-        'PORT': os.environ.get('DB_PORT', '5432'),
-    }
+    'default': dj_database_url.parse(config('DATABASE_URL'))
 }
 
 # Password validation
@@ -124,7 +123,7 @@ CORS_ALLOWED_ORIGINS = [
     "http://localhost:5173",
     "http://127.0.0.1:3000",
     "http://127.0.0.1:8000",
-    "automatic-chainsaw-kappa.vercel.app"
+    "http://automatic-chainsaw-kappa.vercel.app"
 ]
 
 # For handling preflight requests
