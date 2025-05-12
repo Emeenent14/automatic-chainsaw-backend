@@ -124,6 +124,7 @@ CORS_ALLOWED_ORIGINS = [
     "http://127.0.0.1:3000",
     "http://127.0.0.1:8000",
     "https://cbrtunn-students-registration-ng.onrender.com",
+    "https://cbrtunn-student-verification-ng.onrender.com",
     "https://automatic-chainsaw-kappa.vercel.app",
 ]
 
